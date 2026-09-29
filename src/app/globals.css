@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+@theme {
+  /* Light theme: cream ground, black text, accents darkened for contrast */
+  --color-ink: #fff1e7;
+  --color-ink-2: #f9e4d4;
+  --color-ink-3: #f2d7c2;
+  --color-line: rgba(0, 0, 0, 0.12);
+  --color-paper: #0a0a0a;
+  --color-muted: #3d3835;
+  /* Accent family: burgundy #601A35 with light-pink tints */
+  --color-lime: #601a35;
+  --color-magenta: #7a2245;
+  --color-cyan: #a63d69;
+  --color-violet: #8b2f55;
+  --color-blush: #f6bfd0;
+  --color-blush-2: #f0a3bb;
+
+  --font-display: "Montserrat", "Arial Black", Impact, sans-serif;
+  --font-body: "Space Grotesk", system-ui, sans-serif;
+
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 34s linear infinite;
+  --animate-float: float 14s ease-in-out infinite;
+  --animate-float-slow: float 22s ease-in-out infinite reverse;
+  --animate-gradient: gradient 7s ease infinite;
+  --animate-spin-slow: spin 18s linear infinite;
+  --animate-pulse-ring: pulse-ring 2.4s ease-out infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes marquee-reverse {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    33% { transform: translate3d(6vw, -4vh, 0) scale(1.08); }
+    66% { transform: translate3d(-4vw, 5vh, 0) scale(0.94); }
+  }
+  @keyframes gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-blush);
+  color: var(--color-paper);
+}
+
+/* Big display type */
+.display {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+/* Animated multi-colour gradient text */
+.text-gradient {
+  background: linear-gradient(
+    100deg,
+    var(--color-lime) 0%,
+    var(--color-cyan) 35%,
+    var(--color-blush-2) 55%,
+    var(--color-cyan) 75%,
+    var(--color-lime) 100%
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: var(--animate-gradient);
+}
+
+/* Outlined (hollow) display text */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(10, 10, 10, 0.7);
+}
+
+/* Film-grain overlay */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Accent helpers used by data-accent attributes */
+[data-accent="lime"] { --accent: var(--color-lime); }
+[data-accent="magenta"] { --accent: var(--color-magenta); }
+[data-accent="cyan"] { --accent: var(--color-cyan); }
+[data-accent="violet"] { --accent: var(--color-violet); }
+
+.accent-text { color: var(--accent); }
+.accent-bg { background: var(--accent); }
+.accent-border { border-color: var(--accent); }
+.accent-glow { box-shadow: 0 0 0 1px var(--accent), 0 0 60px -10px var(--accent); }
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--color-lime);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
