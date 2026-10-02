@@ -94,17 +94,23 @@ export const projects: Project[] = [
     year: "2026",
   },
   {
-    title: "GitHub-Triggered QA Agent",
+    title: "ARIA: GitHub-Triggered QA Agent",
     description:
-      "Fires on every push or pull request, reads the diff, has an LLM write targeted Playwright and pytest tests for just the changed code, runs them and posts pass/fail to Discord. Test coverage tracks the codebase instead of going stale.",
-    tags: ["Claude", "Playwright", "pytest", "n8n", "Discord"],
+      "Fires on every push, pull request or Vercel deployment, reads the diff, has an LLM write targeted Playwright and pytest tests for just the changed code, runs them in CI and posts the result to Discord with a link to the run. A failed test holds the merge. Test coverage tracks the codebase instead of going stale.",
+    tags: ["Claude", "Playwright", "pytest", "n8n", "GitHub Actions", "Discord"],
     accent: "magenta",
+    image: {
+      src: "/images/aria-qa-agent-discord.png",
+      width: 823,
+      height: 555,
+      alt: "ARIA QA run reports in Discord: per-test results, trigger source (push or Vercel deployment), tests created, run, passed and failed, and a link to the GitHub Actions run; one failed run holds the merge",
+    },
     year: "2026",
   },
   {
-    title: "ARIA: Autonomous Regression Agent",
+    title: "PM/QA Assistant Agent",
     description:
-      "An agent that owns regression testing end to end. It runs the pytest and Playwright suites on its own schedule, keeps run history and flaky-test tracking in MongoDB, reports every failure to Discord with the trace, and opens or updates ClickUp tasks so nothing slips through untracked.",
+      "An assistant agent for product and QA work. It runs the pytest and Playwright regression suites on a schedule, keeps run history and flaky-test tracking in MongoDB, reports every failure to Discord with the trace, and opens or updates ClickUp tasks so nothing slips through untracked.",
     tags: ["pytest", "Playwright", "MongoDB", "Discord", "ClickUp"],
     accent: "cyan",
     year: "2026",
