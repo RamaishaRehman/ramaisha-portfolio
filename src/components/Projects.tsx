@@ -2,6 +2,7 @@
 
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import { useRef, type MouseEvent } from "react";
 import { Reveal, SectionHeading } from "./Reveal";
 import { projects, type Project } from "@/content/site";
@@ -62,6 +63,19 @@ function Card({ project, index }: { project: Project; index: number }) {
             <span className="accent-bg pointer-events-none absolute left-4 top-4 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-ink">
               Demo
             </span>
+          </div>
+        )}
+
+        {!project.video && project.image && (
+          <div className="relative border-b border-line bg-ink-3">
+            <Image
+              src={project.image.src}
+              alt={project.image.alt}
+              width={project.image.width}
+              height={project.image.height}
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="h-auto w-full"
+            />
           </div>
         )}
 

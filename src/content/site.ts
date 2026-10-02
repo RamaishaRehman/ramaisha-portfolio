@@ -76,6 +76,8 @@ export type Project = {
   video?: string;
   /** Poster frame for the demo video. */
   poster?: string;
+  /** Screenshot (under /public) shown at the top of the card when there is no video. */
+  image?: { src: string; width: number; height: number; alt: string };
   year: string;
 };
 
@@ -113,6 +115,12 @@ export const projects: Project[] = [
       "Google Sheets is the single source of truth: reference text, article links and an S3 image URL per row. On Create, ChatGPT writes a platform-ready post from the references, Gemini renders a matching social graphic from the reference image, and the assets are packaged together. One Publish click pushes caption and image straight to the LinkedIn API.",
     tags: ["n8n", "ChatGPT", "Gemini", "Google Sheets", "AWS S3", "LinkedIn API"],
     accent: "violet",
+    image: {
+      src: "/images/social-media-post-automation-n8n.jpg",
+      width: 1890,
+      height: 769,
+      alt: "n8n canvas for the Social Media Post Automation workflow: Google Sheets trigger, OpenAI agent, Gemini image generation, S3 upload and LinkedIn post",
+    },
     year: "2025",
   },
   {
@@ -129,6 +137,12 @@ export const projects: Project[] = [
       "A staged pipeline in Bigin by Zoho for a performance-marketing team: form submissions move buyers through acquisition, onboarding and engagement stages via triggers, with repeat submissions created as new records instead of corrupting old ones.",
     tags: ["Bigin by Zoho", "CRM", "Workflow triggers", "KPI tracking"],
     accent: "violet",
+    image: {
+      src: "/images/affiliate-crm-kpi-map.png",
+      width: 1050,
+      height: 515,
+      alt: "Bigin Affiliates flow: acquisition, onboarding and engagement stages mapped to process owners and KPIs",
+    },
     year: "2025",
   },
   {
