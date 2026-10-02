@@ -110,9 +110,15 @@ export const projects: Project[] = [
   {
     title: "PM/QA Assistant Agent",
     description:
-      "An assistant agent for product and QA work. It runs the pytest and Playwright regression suites on a schedule, keeps run history and flaky-test tracking in MongoDB, reports every failure to Discord with the trace, and opens or updates ClickUp tasks so nothing slips through untracked.",
+      "An assistant agent for product and QA work. Point it at a live URL and it audits the app, then posts a Live QA Report to Discord with findings ranked Critical to Low. It also runs the pytest and Playwright regression suites on a schedule, keeps run history in MongoDB, and opens or updates ClickUp tasks so nothing slips through untracked.",
     tags: ["pytest", "Playwright", "MongoDB", "Discord", "ClickUp"],
     accent: "cyan",
+    image: {
+      src: "/images/pm-qa-assistant-discord.png",
+      width: 805,
+      height: 428,
+      alt: "PM/QA Assistant Agent posting a Live QA Report in Discord for a deployed app: an HTML report attachment and a summary of 44 findings by severity",
+    },
     year: "2026",
   },
   {
