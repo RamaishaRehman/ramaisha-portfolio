@@ -151,6 +151,12 @@ export const projects: Project[] = [
       "One slash command in Discord. A FastAPI service has Gemini extract attendees, date, time, timezone and title from plain language, creates the Google Calendar event, sends invites and confirms back in the channel.",
     tags: ["FastAPI", "Gemini", "Discord API", "Google Calendar"],
     accent: "lime",
+    image: {
+      src: "/images/discord-meeting-scheduler.jpg",
+      width: 945,
+      height: 453,
+      alt: "Discord meeting agent reply after a /schedule command: event title, date, duration, attendees, Google Meet link and calendar event, with invites sent via Gmail",
+    },
     year: "2025",
   },
 ];
