@@ -47,6 +47,24 @@ function Card({ project, index }: { project: Project; index: number }) {
           <div className="accent-bg h-full w-full rounded-full" />
         </motion.div>
 
+        {project.video && (
+          <div className="relative border-b border-line bg-ink-3">
+            <video
+              src={project.video}
+              poster={project.poster}
+              controls
+              muted
+              playsInline
+              preload="metadata"
+              aria-label={`${project.title} demo`}
+              className="aspect-video w-full object-cover"
+            />
+            <span className="accent-bg pointer-events-none absolute left-4 top-4 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-ink">
+              Demo
+            </span>
+          </div>
+        )}
+
         <Wrapper
           {...(project.href ? { href: project.href, target: "_blank", rel: "noreferrer" } : {})}
           className={`relative flex h-full flex-col gap-8 p-7 sm:p-9 ${project.href ? "cursor-pointer" : ""}`}

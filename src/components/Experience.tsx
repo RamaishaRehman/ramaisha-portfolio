@@ -33,7 +33,9 @@ export function Experience() {
                 <div className="sm:col-span-9">
                   <h3 className="display text-3xl sm:text-5xl">{e.role}</h3>
                   <p className="mt-2 text-base font-semibold text-paper/80 sm:text-lg">{e.org}</p>
-                  <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">{e.summary}</p>
+                  {e.summary && (
+                    <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">{e.summary}</p>
+                  )}
                 </div>
               </div>
             </Reveal>

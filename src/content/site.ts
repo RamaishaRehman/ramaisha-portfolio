@@ -60,7 +60,7 @@ export const about = {
 };
 
 export const stats = [
-  { value: 6, suffix: "", label: "Automation systems in production" },
+  { value: 7, suffix: "", label: "Automation systems in production" },
   { value: 5, suffix: "", label: "AI agents in one content pipeline" },
   { value: 4, suffix: "+", label: "Years automating workflows" },
   { value: 12, suffix: "+", label: "APIs and platforms integrated" },
@@ -72,6 +72,10 @@ export type Project = {
   tags: string[];
   accent: Accent;
   href?: string;
+  /** Path (under /public) to a short demo recording shown at the top of the card. */
+  video?: string;
+  /** Poster frame for the demo video. */
+  poster?: string;
   year: string;
 };
 
@@ -83,6 +87,8 @@ export const projects: Project[] = [
     tags: ["LangGraph", "Gemini", "FastAPI", "pgvector", "LinkedIn API"],
     accent: "lime",
     href: "https://content-engine-automation.vercel.app",
+    video: "/videos/linkedin-content-engine-demo.mp4",
+    poster: "/videos/linkedin-content-engine-poster.jpg",
     year: "2026",
   },
   {
@@ -92,6 +98,22 @@ export const projects: Project[] = [
     tags: ["Claude", "Playwright", "pytest", "n8n", "Discord"],
     accent: "magenta",
     year: "2026",
+  },
+  {
+    title: "ARIA: Autonomous Regression Agent",
+    description:
+      "An agent that owns regression testing end to end. It runs the pytest and Playwright suites on its own schedule, keeps run history and flaky-test tracking in MongoDB, reports every failure to Discord with the trace, and opens or updates ClickUp tasks so nothing slips through untracked.",
+    tags: ["pytest", "Playwright", "MongoDB", "Discord", "ClickUp"],
+    accent: "cyan",
+    year: "2026",
+  },
+  {
+    title: "Social Media Post Automation",
+    description:
+      "Google Sheets is the single source of truth: reference text, article links and an S3 image URL per row. On Create, ChatGPT writes a platform-ready post from the references, Gemini renders a matching social graphic from the reference image, and the assets are packaged together. One Publish click pushes caption and image straight to the LinkedIn API.",
+    tags: ["n8n", "ChatGPT", "Gemini", "Google Sheets", "AWS S3", "LinkedIn API"],
+    accent: "violet",
+    year: "2025",
   },
   {
     title: "AI Applicant Tracking System",
@@ -149,21 +171,25 @@ export const skillGroups = [
   },
 ];
 
-export const experience = [
+export type ExperienceItem = {
+  period: string;
+  role: string;
+  org: string;
+  summary?: string;
+  accent: Accent;
+};
+
+export const experience: ExperienceItem[] = [
   {
     period: "Aug 2023 — Now",
     role: "Product Management & Automation",
     org: "MOD.Ventures · Management team · Remote",
-    summary:
-      "Architected the LinkedIn Content Engine, built the Discord meeting agent and the social media automation pipeline, and drove roadmaps for the Colaraz Admissions support agent and the Colaraz Impact platform.",
     accent: "lime" as Accent,
   },
   {
     period: "Jan 2022 — Now",
     role: "Automation Specialist",
     org: "Upwork · Freelance · Remote",
-    summary:
-      "AI agent systems for business process automation: ARIA, an autonomous regression agent on pytest, Playwright, MongoDB, Discord and ClickUp; n8n + GitHub webhook pipelines with Claude; a voice AI receptionist for a salon.",
     accent: "cyan" as Accent,
   },
   {
