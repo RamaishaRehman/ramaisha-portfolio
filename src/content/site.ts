@@ -141,6 +141,12 @@ export const projects: Project[] = [
       "Takes a candidate from Google Form submission to shortlist with zero manual review: Gemini scores each resume against the job description, auto-shortlists above a threshold and sends calendar-invite emails, duplicate-safe by candidate ID.",
     tags: ["n8n", "Gemini", "Google Forms", "Calendar API"],
     accent: "cyan",
+    image: {
+      src: "/images/ai-applicant-tracking-system.jpg",
+      width: 1024,
+      height: 680,
+      alt: "AI Applicant Tracking System case study cover: AI processing, resume screening and analytics icons",
+    },
     year: "2025",
   },
   {
