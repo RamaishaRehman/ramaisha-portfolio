@@ -5,94 +5,122 @@ import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState, type MouseEvent } from "react";
 import { Reveal, SectionHeading } from "./Reveal";
-import { projects, type Project, type ProjectImage } from "@/content/site";
+import { projects, type Project, type ProjectMedia } from "@/content/site";
 
-/** Horizontally scrollable, snap-aligned image gallery with dots and arrows. */
-function Gallery({ images, title }: { images: ProjectImage[]; title: string }) {
+const SIZES = "(min-width: 768px) 50vw, 100vw";
+
+/** One 3:2 slide: an image with a blurred self-fill, or a video on a solid letterbox colour. */
+function Slide({ item }: { item: ProjectMedia }) {
+  if (item.type === "video") {
+    return (
+      <div className="relative h-full w-full" style={{ background: item.bg ?? "var(--color-ink-3)" }}>
+        <video
+          src={item.src}
+          poster={item.poster}
+          controls
+          muted
+          playsInline
+          preload="metadata"
+          aria-label={item.label}
+          className="h-full w-full object-contain"
+        />
+        <span className="accent-bg pointer-events-none absolute left-4 top-4 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-ink">
+          Demo
+        </span>
+      </div>
+    );
+  }
+  return (
+    <div className="relative h-full w-full">
+      <Image aria-hidden src={item.src} alt="" fill sizes={SIZES} className="scale-125 object-cover opacity-70 blur-2xl" />
+      <Image
+        src={item.src}
+        alt={item.alt}
+        width={item.width}
+        height={item.height}
+        sizes={SIZES}
+        className="relative h-full w-full object-contain"
+      />
+    </div>
+  );
+}
+
+/** Horizontally scrollable, snap-aligned media gallery with dots and arrows. */
+function Gallery({ media, title }: { media: ProjectMedia[]; title: string }) {
   const track = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const many = media.length > 1;
 
   const onScroll = () => {
     const el = track.current;
     if (!el) return;
-    setActive(Math.round(el.scrollLeft / el.clientWidth));
+    const next = Math.round(el.scrollLeft / el.clientWidth);
+    if (next === active) return;
+    setActive(next);
+    // Pause any video that has scrolled out of view.
+    el.querySelectorAll("video").forEach((v, i) => {
+      if (i !== next) v.pause();
+    });
   };
   const go = (dir: -1 | 1) => {
     const el = track.current;
     if (!el) return;
-    const next = Math.min(images.length - 1, Math.max(0, active + dir));
+    const next = Math.min(media.length - 1, Math.max(0, active + dir));
     el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
   };
+
+  const arrow =
+    "absolute top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-ink/80 text-paper opacity-0 backdrop-blur transition-opacity duration-300 hover:bg-ink focus-visible:opacity-100 disabled:pointer-events-none disabled:opacity-0 group-hover/gallery:opacity-100";
 
   return (
     <div className="group/gallery relative border-b border-line bg-ink-3">
       <div
         ref={track}
-        onScroll={onScroll}
-        role="region"
-        aria-roledescription="carousel"
-        aria-label={`${title} screenshots`}
+        onScroll={many ? onScroll : undefined}
+        role={many ? "region" : undefined}
+        aria-roledescription={many ? "carousel" : undefined}
+        aria-label={many ? `${title} media` : undefined}
         className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto scroll-smooth"
       >
-        {images.map((img, i) => (
+        {media.map((item, i) => (
           <div
-            key={img.src}
+            key={item.src}
             className="relative aspect-[3/2] w-full shrink-0 snap-center overflow-hidden"
-            aria-hidden={i !== active}
+            aria-hidden={many && i !== active}
           >
-            {/* Blurred copy fills the frame behind images whose ratio is not 3:2 */}
-            <Image
-              aria-hidden
-              src={img.src}
-              alt=""
-              fill
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="scale-125 object-cover opacity-70 blur-2xl"
-            />
-            <Image
-              src={img.src}
-              alt={img.alt}
-              width={img.width}
-              height={img.height}
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="relative h-full w-full object-contain"
-            />
+            <Slide item={item} />
           </div>
         ))}
       </div>
 
-      <button
-        type="button"
-        aria-label="Previous screenshot"
-        onClick={() => go(-1)}
-        disabled={active === 0}
-        className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-ink/80 text-paper opacity-0 backdrop-blur transition-opacity duration-300 hover:bg-ink focus-visible:opacity-100 disabled:pointer-events-none disabled:opacity-0 group-hover/gallery:opacity-100"
-      >
-        <ChevronLeft className="h-5 w-5" />
-      </button>
-      <button
-        type="button"
-        aria-label="Next screenshot"
-        onClick={() => go(1)}
-        disabled={active === images.length - 1}
-        className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-ink/80 text-paper opacity-0 backdrop-blur transition-opacity duration-300 hover:bg-ink focus-visible:opacity-100 disabled:pointer-events-none disabled:opacity-0 group-hover/gallery:opacity-100"
-      >
-        <ChevronRight className="h-5 w-5" />
-      </button>
+      {many && (
+        <>
+          <button type="button" aria-label="Previous" onClick={() => go(-1)} disabled={active === 0} className={`${arrow} left-3`}>
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            aria-label="Next"
+            onClick={() => go(1)}
+            disabled={active === media.length - 1}
+            className={`${arrow} right-3`}
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
 
-      <div className="pointer-events-none absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5 rounded-full bg-ink/80 px-2.5 py-1.5 backdrop-blur">
-        {images.map((img, i) => (
-          <span
-            key={img.src}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              i === active ? "accent-bg w-4" : "w-1.5 bg-paper/40"
-            }`}
-          />
-        ))}
-      </div>
-      <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-ink/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-paper backdrop-blur">
-        {active + 1} / {images.length}
-      </span>
+          <div className="pointer-events-none absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5 rounded-full bg-ink/80 px-2.5 py-1.5 backdrop-blur">
+            {media.map((item, i) => (
+              <span
+                key={item.src}
+                className={`h-1.5 rounded-full transition-all duration-300 ${i === active ? "accent-bg w-4" : "w-1.5 bg-paper/40"}`}
+              />
+            ))}
+          </div>
+          <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-ink/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-paper backdrop-blur">
+            {active + 1} / {media.length}
+          </span>
+        </>
+      )}
     </div>
   );
 }
@@ -138,40 +166,8 @@ function Card({ project, index }: { project: Project; index: number }) {
           <div className="accent-bg h-full w-full rounded-full" />
         </motion.div>
 
-        {project.video && (
-          <div className="relative border-b border-line bg-ink-3">
-            <video
-              src={project.video}
-              poster={project.poster}
-              controls
-              muted
-              playsInline
-              preload="metadata"
-              aria-label={`${project.title} demo`}
-              className="aspect-video w-full object-cover"
-            />
-            <span className="accent-bg pointer-events-none absolute left-4 top-4 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-ink">
-              Demo
-            </span>
-          </div>
-        )}
-
-        {!project.video && project.images && project.images.length > 1 && (
-          <Gallery images={project.images} title={project.title} />
-        )}
-
-        {!project.video && !project.images && project.image && (
-          <div className="relative border-b border-line bg-ink-3">
-            <Image
-              src={project.image.src}
-              alt={project.image.alt}
-              width={project.image.width}
-              height={project.image.height}
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="h-auto w-full"
-            />
-          </div>
-        )}
+        {/* Media sits outside the link so video controls and gallery arrows never trigger navigation. */}
+        {project.media && project.media.length > 0 && <Gallery media={project.media} title={project.title} />}
 
         <Wrapper
           {...(project.href ? { href: project.href, target: "_blank", rel: "noreferrer" } : {})}

@@ -66,7 +66,14 @@ export const stats = [
   { value: 12, suffix: "+", label: "APIs and platforms integrated" },
 ];
 
-export type ProjectImage = { src: string; width: number; height: number; alt: string };
+/**
+ * One slide of a project card's media gallery. Paths are under /public.
+ * Images are shown whole inside a 3:2 frame with a blurred copy filling the gaps.
+ * Videos are shown whole too; `bg` sets the letterbox colour (match the thumbnail).
+ */
+export type ProjectMedia =
+  | { type: "image"; src: string; width: number; height: number; alt: string }
+  | { type: "video"; src: string; poster?: string; label: string; bg?: string };
 
 export type Project = {
   title: string;
@@ -74,14 +81,8 @@ export type Project = {
   tags: string[];
   accent: Accent;
   href?: string;
-  /** Path (under /public) to a short demo recording shown at the top of the card. */
-  video?: string;
-  /** Poster frame for the demo video. */
-  poster?: string;
-  /** Screenshot (under /public) shown at the top of the card when there is no video. */
-  image?: ProjectImage;
-  /** Several screenshots: the card shows a horizontally scrollable gallery instead of a single image. */
-  images?: ProjectImage[];
+  /** Slides shown at the top of the card. One slide renders plainly; more become a scrollable gallery. */
+  media?: ProjectMedia[];
   year: string;
 };
 
@@ -93,8 +94,22 @@ export const projects: Project[] = [
     tags: ["LangGraph", "Gemini", "FastAPI", "pgvector", "LinkedIn API"],
     accent: "lime",
     href: "https://content-engine-automation.vercel.app",
-    video: "/videos/linkedin-content-engine-demo.mp4",
-    poster: "/videos/linkedin-content-engine-poster.jpg",
+    media: [
+      {
+        type: "image",
+        src: "/images/linkedin-content-engine-thumbnail.jpg",
+        width: 1536,
+        height: 1024,
+        alt: "Multi-Agent LinkedIn Content Engine: Research, Writing, Design and Publishing agents around a LinkedIn engine. Targeted trends and insights, engaging post ideas, custom visuals and brand style, scheduled publishing, higher engagement",
+      },
+      {
+        type: "video",
+        src: "/videos/linkedin-content-engine-demo.mp4",
+        poster: "/videos/linkedin-content-engine-poster.jpg",
+        label: "Multi-Agent LinkedIn Content Engine demo",
+        bg: "#fbe2dc",
+      },
+    ],
     year: "2026",
   },
   {
@@ -103,14 +118,16 @@ export const projects: Project[] = [
       "Fires on every push, pull request or Vercel deployment, reads the diff, has an LLM write targeted Playwright and pytest tests for just the changed code, runs them in CI and posts the result to Discord with a link to the run. A failed test holds the merge. Test coverage tracks the codebase instead of going stale.",
     tags: ["Claude", "Playwright", "pytest", "n8n", "GitHub Actions", "Discord"],
     accent: "magenta",
-    images: [
+    media: [
       {
+        type: "image",
         src: "/images/aria-qa-agent-thumbnail.jpg",
         width: 1536,
         height: 1024,
         alt: "ARIA QA Agent: a robot reads GitHub diffs, runs unit, UI, API and accessibility tests, and reports to Discord and ClickUp. Smart test selection, AI-powered analysis, clear bug reports, faster feedback, end-to-end automation",
       },
       {
+        type: "image",
         src: "/images/aria-qa-agent-discord.png",
         width: 898,
         height: 447,
@@ -125,12 +142,15 @@ export const projects: Project[] = [
       "An assistant agent for product and QA work. Point it at a live URL and it audits the app, then posts a Live QA Report to Discord with findings ranked Critical to Low. It also runs the pytest and Playwright regression suites on a schedule, keeps run history in MongoDB, and opens or updates ClickUp tasks so nothing slips through untracked.",
     tags: ["pytest", "Playwright", "MongoDB", "Discord", "ClickUp"],
     accent: "cyan",
-    image: {
-      src: "/images/pm-qa-assistant-discord.png",
-      width: 805,
-      height: 428,
-      alt: "PM/QA Assistant Agent posting a Live QA Report in Discord for a deployed app: an HTML report attachment and a summary of 44 findings by severity",
-    },
+    media: [
+      {
+        type: "image",
+        src: "/images/pm-qa-assistant-discord.png",
+        width: 805,
+        height: 428,
+        alt: "PM/QA Assistant Agent posting a Live QA Report in Discord for a deployed app: an HTML report attachment and a summary of 44 findings by severity",
+      },
+    ],
     year: "2026",
   },
   {
@@ -139,12 +159,15 @@ export const projects: Project[] = [
       "Google Sheets is the single source of truth: reference text, article links and an S3 image URL per row. On Create, ChatGPT writes a platform-ready post from the references, Gemini renders a matching social graphic from the reference image, and the assets are packaged together. One Publish click pushes caption and image straight to the LinkedIn API.",
     tags: ["n8n", "ChatGPT", "Gemini", "Google Sheets", "AWS S3", "LinkedIn API"],
     accent: "violet",
-    image: {
-      src: "/images/social-media-post-automation-n8n.jpg",
-      width: 1890,
-      height: 769,
-      alt: "n8n canvas for the Social Media Post Automation workflow: Google Sheets trigger, OpenAI agent, Gemini image generation, S3 upload and LinkedIn post",
-    },
+    media: [
+      {
+        type: "image",
+        src: "/images/social-media-post-automation-n8n.jpg",
+        width: 1890,
+        height: 769,
+        alt: "n8n canvas for the Social Media Post Automation workflow: Google Sheets trigger, OpenAI agent, Gemini image generation, S3 upload and LinkedIn post",
+      },
+    ],
     year: "2025",
   },
   {
@@ -153,12 +176,15 @@ export const projects: Project[] = [
       "Takes a candidate from Google Form submission to shortlist with zero manual review: Gemini scores each resume against the job description, auto-shortlists above a threshold and sends calendar-invite emails, duplicate-safe by candidate ID.",
     tags: ["n8n", "Gemini", "Google Forms", "Calendar API"],
     accent: "cyan",
-    image: {
-      src: "/images/ai-applicant-tracking-system.jpg",
-      width: 1024,
-      height: 680,
-      alt: "AI Applicant Tracking System case study cover: AI processing, resume screening and analytics icons",
-    },
+    media: [
+      {
+        type: "image",
+        src: "/images/ai-applicant-tracking-system.jpg",
+        width: 1024,
+        height: 680,
+        alt: "AI Applicant Tracking System case study cover: AI processing, resume screening and analytics icons",
+      },
+    ],
     year: "2025",
   },
   {
@@ -167,12 +193,15 @@ export const projects: Project[] = [
       "A staged pipeline in Bigin by Zoho for a performance-marketing team: form submissions move buyers through acquisition, onboarding and engagement stages via triggers, with repeat submissions created as new records instead of corrupting old ones.",
     tags: ["Bigin by Zoho", "CRM", "Workflow triggers", "KPI tracking"],
     accent: "violet",
-    image: {
-      src: "/images/affiliate-crm-kpi-map.png",
-      width: 1050,
-      height: 515,
-      alt: "Bigin Affiliates flow: acquisition, onboarding and engagement stages mapped to process owners and KPIs",
-    },
+    media: [
+      {
+        type: "image",
+        src: "/images/affiliate-crm-kpi-map.png",
+        width: 1050,
+        height: 515,
+        alt: "Bigin Affiliates flow: acquisition, onboarding and engagement stages mapped to process owners and KPIs",
+      },
+    ],
     year: "2025",
   },
   {
@@ -181,12 +210,15 @@ export const projects: Project[] = [
       "One slash command in Discord. A FastAPI service has Gemini extract attendees, date, time, timezone and title from plain language, creates the Google Calendar event, sends invites and confirms back in the channel.",
     tags: ["FastAPI", "Gemini", "Discord API", "Google Calendar"],
     accent: "lime",
-    image: {
-      src: "/images/discord-meeting-scheduler.jpg",
-      width: 945,
-      height: 453,
-      alt: "Discord meeting agent reply after a /schedule command: event title, date, duration, attendees, Google Meet link and calendar event, with invites sent via Gmail",
-    },
+    media: [
+      {
+        type: "image",
+        src: "/images/discord-meeting-scheduler.jpg",
+        width: 945,
+        height: 453,
+        alt: "Discord meeting agent reply after a /schedule command: event title, date, duration, attendees, Google Meet link and calendar event, with invites sent via Gmail",
+      },
+    ],
     year: "2025",
   },
 ];
