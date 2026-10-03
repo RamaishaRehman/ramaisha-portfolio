@@ -105,7 +105,7 @@ export const projects: Project[] = [
     accent: "magenta",
     images: [
       {
-        src: "/images/aria-qa-agent-thumbnail.jpg",
+        src: "/images/aria-qa-agent-thumbnail-burgundy.jpg",
         width: 1536,
         height: 1024,
         alt: "ARIA QA Agent: a robot reads GitHub diffs, runs unit, UI, API and accessibility tests, and reports to Discord and ClickUp. Smart test selection, AI-powered analysis, clear bug reports, faster feedback, end-to-end automation",
