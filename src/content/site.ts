@@ -112,8 +112,8 @@ export const projects: Project[] = [
       },
       {
         src: "/images/aria-qa-agent-discord.png",
-        width: 823,
-        height: 555,
+        width: 898,
+        height: 447,
         alt: "ARIA QA run reports in Discord: per-test results, trigger source (push or Vercel deployment), tests created, run, passed and failed, and a link to the GitHub Actions run; one failed run holds the merge",
       },
     ],

@@ -35,14 +35,27 @@ function Gallery({ images, title }: { images: ProjectImage[]; title: string }) {
         className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto scroll-smooth"
       >
         {images.map((img, i) => (
-          <div key={img.src} className="aspect-[3/2] w-full shrink-0 snap-center" aria-hidden={i !== active}>
+          <div
+            key={img.src}
+            className="relative aspect-[3/2] w-full shrink-0 snap-center overflow-hidden"
+            aria-hidden={i !== active}
+          >
+            {/* Blurred copy fills the frame behind images whose ratio is not 3:2 */}
+            <Image
+              aria-hidden
+              src={img.src}
+              alt=""
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="scale-125 object-cover opacity-70 blur-2xl"
+            />
             <Image
               src={img.src}
               alt={img.alt}
               width={img.width}
               height={img.height}
               sizes="(min-width: 768px) 50vw, 100vw"
-              className="h-full w-full object-cover"
+              className="relative h-full w-full object-contain"
             />
           </div>
         ))}
