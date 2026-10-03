@@ -127,6 +127,15 @@ body {
 .accent-border { border-color: var(--accent); }
 .accent-glow { box-shadow: 0 0 0 1px var(--accent), 0 0 60px -10px var(--accent); }
 
+/* Scrollable galleries: keep scrolling, hide the bar */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Focus ring */
 :focus-visible {
   outline: 2px solid var(--color-lime);

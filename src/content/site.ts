@@ -66,6 +66,8 @@ export const stats = [
   { value: 12, suffix: "+", label: "APIs and platforms integrated" },
 ];
 
+export type ProjectImage = { src: string; width: number; height: number; alt: string };
+
 export type Project = {
   title: string;
   description: string;
@@ -77,7 +79,9 @@ export type Project = {
   /** Poster frame for the demo video. */
   poster?: string;
   /** Screenshot (under /public) shown at the top of the card when there is no video. */
-  image?: { src: string; width: number; height: number; alt: string };
+  image?: ProjectImage;
+  /** Several screenshots: the card shows a horizontally scrollable gallery instead of a single image. */
+  images?: ProjectImage[];
   year: string;
 };
 
@@ -99,12 +103,20 @@ export const projects: Project[] = [
       "Fires on every push, pull request or Vercel deployment, reads the diff, has an LLM write targeted Playwright and pytest tests for just the changed code, runs them in CI and posts the result to Discord with a link to the run. A failed test holds the merge. Test coverage tracks the codebase instead of going stale.",
     tags: ["Claude", "Playwright", "pytest", "n8n", "GitHub Actions", "Discord"],
     accent: "magenta",
-    image: {
-      src: "/images/aria-qa-agent-thumbnail.jpg",
-      width: 1536,
-      height: 1024,
-      alt: "ARIA QA Agent: a robot reads GitHub diffs, runs unit, UI, API and accessibility tests, and reports to Discord and ClickUp. Smart test selection, AI-powered analysis, clear bug reports, faster feedback, end-to-end automation",
-    },
+    images: [
+      {
+        src: "/images/aria-qa-agent-thumbnail.jpg",
+        width: 1536,
+        height: 1024,
+        alt: "ARIA QA Agent: a robot reads GitHub diffs, runs unit, UI, API and accessibility tests, and reports to Discord and ClickUp. Smart test selection, AI-powered analysis, clear bug reports, faster feedback, end-to-end automation",
+      },
+      {
+        src: "/images/aria-qa-agent-discord.png",
+        width: 823,
+        height: 555,
+        alt: "ARIA QA run reports in Discord: per-test results, trigger source (push or Vercel deployment), tests created, run, passed and failed, and a link to the GitHub Actions run; one failed run holds the merge",
+      },
+    ],
     year: "2026",
   },
   {

@@ -1,11 +1,88 @@
 "use client";
 
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { useRef, type MouseEvent } from "react";
+import { useRef, useState, type MouseEvent } from "react";
 import { Reveal, SectionHeading } from "./Reveal";
-import { projects, type Project } from "@/content/site";
+import { projects, type Project, type ProjectImage } from "@/content/site";
+
+/** Horizontally scrollable, snap-aligned image gallery with dots and arrows. */
+function Gallery({ images, title }: { images: ProjectImage[]; title: string }) {
+  const track = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+
+  const onScroll = () => {
+    const el = track.current;
+    if (!el) return;
+    setActive(Math.round(el.scrollLeft / el.clientWidth));
+  };
+  const go = (dir: -1 | 1) => {
+    const el = track.current;
+    if (!el) return;
+    const next = Math.min(images.length - 1, Math.max(0, active + dir));
+    el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
+  };
+
+  return (
+    <div className="group/gallery relative border-b border-line bg-ink-3">
+      <div
+        ref={track}
+        onScroll={onScroll}
+        role="region"
+        aria-roledescription="carousel"
+        aria-label={`${title} screenshots`}
+        className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto scroll-smooth"
+      >
+        {images.map((img, i) => (
+          <div key={img.src} className="aspect-[3/2] w-full shrink-0 snap-center" aria-hidden={i !== active}>
+            <Image
+              src={img.src}
+              alt={img.alt}
+              width={img.width}
+              height={img.height}
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="h-full w-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
+
+      <button
+        type="button"
+        aria-label="Previous screenshot"
+        onClick={() => go(-1)}
+        disabled={active === 0}
+        className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-ink/80 text-paper opacity-0 backdrop-blur transition-opacity duration-300 hover:bg-ink focus-visible:opacity-100 disabled:pointer-events-none disabled:opacity-0 group-hover/gallery:opacity-100"
+      >
+        <ChevronLeft className="h-5 w-5" />
+      </button>
+      <button
+        type="button"
+        aria-label="Next screenshot"
+        onClick={() => go(1)}
+        disabled={active === images.length - 1}
+        className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-ink/80 text-paper opacity-0 backdrop-blur transition-opacity duration-300 hover:bg-ink focus-visible:opacity-100 disabled:pointer-events-none disabled:opacity-0 group-hover/gallery:opacity-100"
+      >
+        <ChevronRight className="h-5 w-5" />
+      </button>
+
+      <div className="pointer-events-none absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5 rounded-full bg-ink/80 px-2.5 py-1.5 backdrop-blur">
+        {images.map((img, i) => (
+          <span
+            key={img.src}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              i === active ? "accent-bg w-4" : "w-1.5 bg-paper/40"
+            }`}
+          />
+        ))}
+      </div>
+      <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-ink/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-paper backdrop-blur">
+        {active + 1} / {images.length}
+      </span>
+    </div>
+  );
+}
 
 function Card({ project, index }: { project: Project; index: number }) {
   const ref = useRef<HTMLElement>(null);
@@ -66,7 +143,11 @@ function Card({ project, index }: { project: Project; index: number }) {
           </div>
         )}
 
-        {!project.video && project.image && (
+        {!project.video && project.images && project.images.length > 1 && (
+          <Gallery images={project.images} title={project.title} />
+        )}
+
+        {!project.video && !project.images && project.image && (
           <div className="relative border-b border-line bg-ink-3">
             <Image
               src={project.image.src}
