@@ -145,6 +145,13 @@ export const projects: Project[] = [
     media: [
       {
         type: "image",
+        src: "/images/pm-qa-assistant-thumbnail.jpg",
+        width: 1536,
+        height: 1024,
+        alt: "PM/QA Assistant Agent: plan, test, improve. A robot teammate handling project management (create tasks, track progress, update stakeholders), QA and testing (review code, run tests, log issues) and reports (summarize results, highlight risks, suggest improvements)",
+      },
+      {
+        type: "image",
         src: "/images/pm-qa-assistant-discord.png",
         width: 805,
         height: 428,
