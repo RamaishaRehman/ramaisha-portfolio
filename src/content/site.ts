@@ -68,8 +68,8 @@ export const stats = [
 
 /**
  * One slide of a project card's media gallery. Paths are under /public.
- * Images are shown whole inside a 3:2 frame with a blurred copy filling the gaps.
- * Videos are shown whole too; `bg` sets the letterbox colour (match the thumbnail).
+ * Media is shown whole inside a 3:2 frame; any gap takes the card's background colour.
+ * A video can set `bg` to use a different letterbox colour (for example the thumbnail's).
  */
 export type ProjectMedia =
   | { type: "image"; src: string; width: number; height: number; alt: string }

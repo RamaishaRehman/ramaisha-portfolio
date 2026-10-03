@@ -9,11 +9,11 @@ import { projects, type Project, type ProjectMedia } from "@/content/site";
 
 const SIZES = "(min-width: 768px) 50vw, 100vw";
 
-/** One 3:2 slide: an image with a blurred self-fill, or a video on a solid letterbox colour. */
+/** One 3:2 slide. Media is shown whole; gaps take the card colour, or the video's own `bg`. */
 function Slide({ item }: { item: ProjectMedia }) {
   if (item.type === "video") {
     return (
-      <div className="relative h-full w-full" style={{ background: item.bg ?? "var(--color-ink-3)" }}>
+      <div className="relative h-full w-full bg-ink-2" style={item.bg ? { background: item.bg } : undefined}>
         <video
           src={item.src}
           poster={item.poster}
@@ -31,16 +31,8 @@ function Slide({ item }: { item: ProjectMedia }) {
     );
   }
   return (
-    <div className="relative h-full w-full">
-      <Image aria-hidden src={item.src} alt="" fill sizes={SIZES} className="scale-125 object-cover opacity-70 blur-2xl" />
-      <Image
-        src={item.src}
-        alt={item.alt}
-        width={item.width}
-        height={item.height}
-        sizes={SIZES}
-        className="relative h-full w-full object-contain"
-      />
+    <div className="h-full w-full bg-ink-2">
+      <Image src={item.src} alt={item.alt} width={item.width} height={item.height} sizes={SIZES} className="h-full w-full object-contain" />
     </div>
   );
 }
@@ -73,7 +65,7 @@ function Gallery({ media, title }: { media: ProjectMedia[]; title: string }) {
     "absolute top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-ink/80 text-paper opacity-0 backdrop-blur transition-opacity duration-300 hover:bg-ink focus-visible:opacity-100 disabled:pointer-events-none disabled:opacity-0 group-hover/gallery:opacity-100";
 
   return (
-    <div className="group/gallery relative border-b border-line bg-ink-3">
+    <div className="group/gallery relative border-b border-line bg-ink-2">
       <div
         ref={track}
         onScroll={many ? onScroll : undefined}
